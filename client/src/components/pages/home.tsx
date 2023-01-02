@@ -1,16 +1,27 @@
+import { useState } from "react";
+
 export function Home() {
-  let number = 0;
+  const [number, setNumber] = useState<number>(0);
+
+  let num2 = 0;
 
   function add() {
-    number++;
-    console.log(number);
+    setNumber(number + 1);
   }
+
+  console.log("renderizou home");
 
   return (
     <div>
-      <h1>{number}</h1>
-      <button className="button" onClick={add}>
-        Add number
+      <h1 id="number">{number}</h1>
+      <button onClick={add}>Add number</button>
+      <button
+        onClick={() => {
+          num2++;
+          console.log(num2);
+        }}
+      >
+        Add number 2
       </button>
     </div>
   );
