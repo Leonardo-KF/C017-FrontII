@@ -29,9 +29,51 @@ export const StyledForm = styled.form`
     margin: 5px;
     border-radius: 5px;
     border: none;
+    height: 35px;
+    background: ${(props) => props.theme.darkTheme.fg};
+    font-size: 1.2rem;
+  }
+
+  div {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    align-items: center;
+
+    input {
+      display: flex;
+      width: 100%;
+      border-radius: 5px 0 0 5px;
+      padding: 3px 5px;
+      margin: 0;
+      border: none;
+      height: 35px;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      border: none;
+      padding: 0 5px;
+      margin: 0;
+      cursor: pointer;
+      border-radius: 0 5px 5px 0;
+      height: 35px;
+      background: ${(props) => props.theme.darkTheme.fg};
+    }
   }
 
   button {
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
     margin: 10px;
+    background-color: ${(props) => props.theme.darkTheme.fg};
+    cursor: pointer;
   }
 `;
