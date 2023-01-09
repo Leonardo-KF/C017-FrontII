@@ -27,7 +27,7 @@ export function LoginForm() {
     const userData = await api.login(loginPayload);
     setLoading(false);
     console.log(userData);
-    if (userData.statusCode) {
+    if (!userData) {
       setError(true);
       return;
     }
