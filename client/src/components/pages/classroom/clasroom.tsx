@@ -1,93 +1,75 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Select } from "../../atoms/select/select";
 import { ClickedButton } from "./styles";
 import { Card } from "../../atoms/card/card";
+import { api } from "../../../utils/api/api";
+
+export type classroom = {
+  id: string;
+  name: string;
+  subject: string;
+  theme: string;
+};
 
 export function Classroom() {
-  const [selectedClassroom, setSelectedClassroom] = useState<string>();
-  const [selectedModule, setSelectedModule] = useState<string>();
+  const [classrooms, setClassrooms] = useState<classroom[]>([]);
+  const [search, setSearch] = useState("");
+  // const [sortedClassrooms, setSortedClassrooms] = useState<classroom[]>([]);
 
-  const options = ["Turma 1", "Turma 2", "Turma 3", "Turma 4", "Turma 5"];
-
-  const module = ["Módulo 1", "Módulo 2", "Módulo 3"];
-
-  const alunosTurma1 = ["Átila", "Tiago", "João", "Felipe", "Bruno"];
-
-  const alunosTurma2 = ["Matheus", "Lucas", "Olavo", "Yago"];
-
-  function resultSelect(value: string) {
-    setSelectedModule(value);
-    console.log(selectedModule);
+  async function findClassrooms() {
+    const classes = await api.getClassrooms();
+    setClassrooms(classes);
   }
 
-  const movieList = [
-    {
-      name: "Interstellar",
-      description:
-        "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-    },
-    {
-      name: "A ilha do medo",
-      description:
-        "A writer visits the isolated island of Shutter Island, where he encounters a strange collection of ex-convicts and the brutal, missing wife of a former police chief.",
-    },
-    {
-      name: "A Origem",
-      description:
-        "A thief, who steals corporate secrets through use of dream-sharing technology, is given the inverse task of planting an idea into the mind of a CEO.",
-    },
-  ];
+  const sortedClassrooms =
+    search.length > 0
+      ? classrooms.filter((classroom) =>
+          classroom.name
+            .toLocaleLowerCase()
+            .includes(search.toLocaleLowerCase())
+        )
+      : classrooms;
 
-  const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
+  // 1 array de dependencias vazio = executa uma vez quando o component é montado
+  useEffect(() => {
+    console.log("rodou useEffect");
+    findClassrooms();
+  }, []);
 
-  function selectedMovie(value: string) {
-    if (selectedMovies.includes(value)) {
-      setSelectedMovies((state) =>
-        state.filter((movieName) => movieName !== value)
-      );
-    } else {
-      setSelectedMovies((state) => [...state, value]);
-    }
-  }
+  // 2 array de dependencias com valor = executa toda vez que o valor mudar
+  // useEffect(() => {
+  //   console.log("rodou useEffect 2");
+  //   setTimeout(() => {
+  //     console.log("rodou timeout");
+  //     setControl(!control);
+  //   }, 2000);
+  //   findClassrooms();
+  // }, [control]);
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+  // 3 sem array de dependencias = executa toda vez que um state muda
+  // useEffect(() => {
+  //   console.log("rodou useEffect 3");
+  //   findClassrooms();
+  // });
 
-    console.log(selectedMovies);
-  }
+  console.log("renderizou");
 
   return (
     <div>
       <h2>Clasroom</h2>
-      <Select options={options} selectedOption={setSelectedClassroom} />
-      <Select options={module} selectedOption={resultSelect} />
-      <form onSubmit={handleSubmit}>
-        {movieList.map((movie) => {
-          return (
-            <Card
-              description={movie.description}
-              name={movie.name}
-              selectCard={selectedMovie}
-              key={movie.name}
-            />
-          );
-        })}
-        <button type="submit">enviar</button>
-      </form>
-      {selectedModule === "Módulo 1" && (
-        <>
-          {alunosTurma1.map((aluno) => {
-            return <h2>{aluno}</h2>;
-          })}
-        </>
-      )}
-      {selectedModule === "Módulo 2" && (
-        <>
-          {alunosTurma2.map((aluno) => {
-            return <h2>{aluno}</h2>;
-          })}
-        </>
-      )}
+      <input
+        type="text"
+        onChange={(e) => {
+          setSearch(e.currentTarget.value);
+        }}
+        placeholder="Search"
+      />
+      {sortedClassrooms.map((classroom) => (
+        <div key={classroom.id}>
+          <h2>{classroom.name}</h2>
+          <p>{classroom.subject}</p>
+        </div>
+      ))}
     </div>
   );
 }
