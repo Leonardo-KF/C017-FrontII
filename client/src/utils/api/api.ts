@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LoginRequest } from "../types/requests";
+import { LoginRequest, createClassromPayload } from "../types/requests";
 
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -47,6 +47,35 @@ export const api = {
   getClassrooms: async () => {
     try {
       const response = await axios.get("/classroom");
+      return response.data;
+    } catch (err) {
+      alert(err);
+    }
+  },
+
+  createClassroom: async (payload: createClassromPayload) => {
+    try {
+      const response = await axios.post("/classroom", payload);
+      return response.data;
+    } catch (err) {
+      alert(err);
+    }
+  },
+
+  createAttendanceListToClassroom: async (classroomId: string) => {
+    try {
+      const response = await axios.post("/attendance-list", {
+        classroomId,
+      });
+      return response.data;
+    } catch (err) {
+      alert(err);
+    }
+  },
+
+  getAttendanceLists: async () => {
+    try {
+      const response = await axios.get("/attendance-list");
       return response.data;
     } catch (err) {
       alert(err);

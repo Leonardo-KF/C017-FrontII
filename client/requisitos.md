@@ -6,8 +6,8 @@
 # classroom
 
 - Seleção de turmas que o professor possui
-- Visualização de chamadas concluidas (com filtros)
 - Criar chamada
+- Visualização de chamadas concluidas (com filtros)
 - Numero de faltas de cada aluno
 
 # Chamada

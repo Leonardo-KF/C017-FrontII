@@ -3,6 +3,9 @@ import { Select } from "../../atoms/select/select";
 import { ClickedButton } from "./styles";
 import { Card } from "../../atoms/card/card";
 import { api } from "../../../utils/api/api";
+import { Form, InputProps } from "../../atoms/form/form";
+import { CreateClassroomForm } from "../../molecules/create-classroom-form/create-classroom-form";
+import AttendancesList from "../../molecules/attendances-lists/attendances-lists";
 
 export type classroom = {
   id: string;
@@ -11,30 +14,39 @@ export type classroom = {
   theme: string;
 };
 
+export type attendancePayload = {
+  id: string;
+  classroomId: string;
+  startDate: string;
+  endDate: string;
+  day: string;
+  students: [];
+};
+
 export function Classroom() {
   const [classrooms, setClassrooms] = useState<classroom[]>([]);
-  const [search, setSearch] = useState("");
-  // const [sortedClassrooms, setSortedClassrooms] = useState<classroom[]>([]);
+  const [selectedClassroom, setSelectedClassroom] = useState<
+    string | undefined
+  >();
+  const [control, setControl] = useState<boolean>(false);
 
   async function findClassrooms() {
-    const classes = await api.getClassrooms();
-    setClassrooms(classes);
+    const data = await api.getClassrooms();
+    setClassrooms(data);
   }
 
-  const sortedClassrooms =
-    search.length > 0
-      ? classrooms.filter((classroom) =>
-          classroom.name
-            .toLocaleLowerCase()
-            .includes(search.toLocaleLowerCase())
-        )
-      : classrooms;
+  function getSelectedClassroom(value: string) {
+    setSelectedClassroom(value);
+  }
+
+  function handleControl() {
+    setControl(!control);
+  }
 
   // 1 array de dependencias vazio = executa uma vez quando o component é montado
   useEffect(() => {
-    console.log("rodou useEffect");
     findClassrooms();
-  }, []);
+  }, [control]);
 
   // 2 array de dependencias com valor = executa toda vez que o valor mudar
   // useEffect(() => {
@@ -50,26 +62,19 @@ export function Classroom() {
   // useEffect(() => {
   //   console.log("rodou useEffect 3");
   //   findClassrooms();
-  // });
-
-  console.log("renderizou");
+  // });{
 
   return (
     <div>
-      <h2>Clasroom</h2>
-      <input
-        type="text"
-        onChange={(e) => {
-          setSearch(e.currentTarget.value);
-        }}
-        placeholder="Search"
+      <h2>Clasrooms</h2>
+      <Select
+        options={classrooms.map((classroom) => {
+          return { name: classroom.name, value: classroom.id };
+        })}
+        selectedOption={getSelectedClassroom}
       />
-      {sortedClassrooms.map((classroom) => (
-        <div key={classroom.id}>
-          <h2>{classroom.name}</h2>
-          <p>{classroom.subject}</p>
-        </div>
-      ))}
+      <CreateClassroomForm handleControl={handleControl} />
+      <AttendancesList selectedClassroom={selectedClassroom} />
     </div>
   );
 }
