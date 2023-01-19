@@ -4,7 +4,7 @@ import { Login } from "./components/pages/login/login";
 import { GlobalStyle, theme } from "./global-styles";
 import { ThemeProvider } from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Classroom } from "./components/pages/classroom/clasroom";
+import { Classroom } from "./components/pages/classroom/classroom";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>

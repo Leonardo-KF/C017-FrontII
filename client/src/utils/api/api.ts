@@ -1,5 +1,9 @@
 import axios from "axios";
-import { LoginRequest, createClassromPayload } from "../types/requests";
+import {
+  LoginRequest,
+  CreateClassroomPayload,
+  UpdateClassroomPayload,
+} from "../types/requests";
 
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -31,6 +35,7 @@ axios.interceptors.response.use(
 );
 
 export const api = {
+  // auth keys
   login: async ({ email, password }: LoginRequest) => {
     try {
       const response = await axios.post("/Authorization/login", {
@@ -44,6 +49,8 @@ export const api = {
     }
   },
 
+  // classroom keys
+
   getClassrooms: async () => {
     try {
       const response = await axios.get("/classroom");
@@ -53,7 +60,7 @@ export const api = {
     }
   },
 
-  createClassroom: async (payload: createClassromPayload) => {
+  createClassroom: async (payload: CreateClassroomPayload) => {
     try {
       const response = await axios.post("/classroom", payload);
       return response.data;
@@ -61,6 +68,26 @@ export const api = {
       alert(err);
     }
   },
+
+  updateClassroom: async (payload: UpdateClassroomPayload) => {
+    try {
+      const response = await axios.patch("/classroom", payload);
+      return response.data;
+    } catch (err) {
+      alert(err);
+    }
+  },
+
+  deleteClassroom: async (payload: string) => {
+    try {
+      const response = await axios.delete(`/classroom/${payload}`);
+      return response.data;
+    } catch (err) {
+      alert(err);
+    }
+  },
+
+  // attendance keys
 
   createAttendanceListToClassroom: async (classroomId: string) => {
     try {

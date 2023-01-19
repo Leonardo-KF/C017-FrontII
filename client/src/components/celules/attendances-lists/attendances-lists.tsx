@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../utils/api/api";
-import { attendancePayload } from "../../pages/classroom/clasroom";
+import { AttendancePayload } from "../../pages/classroom/classroom";
 
 export type AttendacesListsProps = {
   selectedClassroom: string | undefined;
@@ -9,7 +9,7 @@ export type AttendacesListsProps = {
 export default function AttendancesList({
   selectedClassroom,
 }: AttendacesListsProps) {
-  const [attendances, setAttendances] = useState<attendancePayload[]>([]);
+  const [attendances, setAttendances] = useState<AttendancePayload[]>([]);
   const [control, setControl] = useState<boolean>(false);
 
   const sortedAttendancesByClassroomId = selectedClassroom

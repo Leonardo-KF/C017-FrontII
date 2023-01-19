@@ -6,8 +6,8 @@ export function Select(props: SelectProps) {
       defaultValue={"default"}
       onChange={(e) => props.selectedOption(e.currentTarget.value)}
     >
-      <option value="default" disabled>
-        Selecione uma opção
+      <option key={"default"} value="default" disabled>
+        select a option
       </option>
       {props.options.map((option) => {
         return (
