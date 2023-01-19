@@ -1,4 +1,5 @@
 import { FormEvent } from "react";
+import { FormContainer } from "./styles";
 
 export interface InputProps {
   placeholder: string;
@@ -16,7 +17,7 @@ export interface FormProps<T = FormEvent<HTMLFormElement>> {
 
 export function Form({ inputs, onSubmit, title, cancel }: FormProps) {
   return (
-    <section>
+    <FormContainer>
       <h2>{title}</h2>
       <form onSubmit={onSubmit}>
         {inputs.map((input, index) => (
@@ -35,6 +36,6 @@ export function Form({ inputs, onSubmit, title, cancel }: FormProps) {
           </button>
         )}
       </form>
-    </section>
+    </FormContainer>
   );
 }
