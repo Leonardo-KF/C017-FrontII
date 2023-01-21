@@ -5,6 +5,7 @@ import { GlobalStyle, theme } from "./global-styles";
 import { ThemeProvider } from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Classroom } from "./components/pages/classroom/classroom";
+import { CreateUser } from "./components/pages/create-user/create-user";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/classroom" element={<Classroom />} />
+        <Route path="/register" element={<CreateUser />} />
       </Routes>
     </BrowserRouter>
     <GlobalStyle />

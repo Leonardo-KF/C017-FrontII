@@ -38,6 +38,7 @@ export function CreateClassroomForm({
 
     const response = await api.createClassroom(data);
     handleControl();
+
     console.log(response);
   }
 

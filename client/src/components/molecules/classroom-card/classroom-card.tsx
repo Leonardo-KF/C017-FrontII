@@ -10,21 +10,8 @@ import {
 
 export type ClassroomCardProps = {
   classroom: Classroom;
-  changeEditingMode: () => void;
-  handleControl: () => void;
-  editingMode: boolean;
 };
-export function ClassroomCard({
-  classroom,
-  changeEditingMode,
-  editingMode,
-  handleControl,
-}: ClassroomCardProps) {
-  async function handleDeleteClassroom() {
-    await api.deleteClassroom(classroom.id ?? "");
-    handleControl();
-  }
-
+export function ClassroomCard({ classroom }: ClassroomCardProps) {
   return (
     <ClassroomCardContainer>
       <CardInfoContainer>
@@ -52,25 +39,6 @@ export function ClassroomCard({
           })}
         </section>
       </CardInfoContainer>
-      <ClassroomCardOptionsContainer>
-        <button
-          onClick={() => {
-            changeEditingMode();
-          }}
-        >
-          Edit this classroom
-        </button>
-        <button onClick={handleDeleteClassroom}>Delete this classroom</button>
-        {editingMode ? (
-          <UpdateClassroomForm
-            handleControl={handleControl}
-            classroom={classroom}
-            changeEditingMode={changeEditingMode}
-          />
-        ) : (
-          <CreateClassroomForm handleControl={handleControl} />
-        )}
-      </ClassroomCardOptionsContainer>
     </ClassroomCardContainer>
   );
 }

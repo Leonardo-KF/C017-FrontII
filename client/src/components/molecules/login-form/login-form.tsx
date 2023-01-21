@@ -26,7 +26,7 @@ export function LoginForm() {
     };
     const userData = await api.login(loginPayload);
     setLoading(false);
-    console.log(userData);
+
     if (!userData) {
       setError(true);
       return;
@@ -60,6 +60,13 @@ export function LoginForm() {
             </div>
             <button type="submit">Login</button>
           </StyledForm>
+          <button
+            onClick={() => {
+              navigate("/register");
+            }}
+          >
+            Not have Account?
+          </button>
         </StyledLoginForm>
       )}
     </>

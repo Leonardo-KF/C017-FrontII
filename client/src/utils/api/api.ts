@@ -1,9 +1,11 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   LoginRequest,
   CreateClassroomPayload,
   UpdateClassroomPayload,
+  UserPayload,
 } from "../types/requests";
+import { HandleError } from "../errors/handle-error-modal";
 
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -31,6 +33,7 @@ axios.interceptors.response.use(
     if (error.response.status === 401) {
       if (localStorage.getItem("token")) localStorage.removeItem("token");
     }
+    throw new Error(error.response.data.message);
   }
 );
 
@@ -44,8 +47,8 @@ export const api = {
       });
       localStorage.setItem("token", response.data.token);
       return response.data;
-    } catch (err) {
-      alert(err);
+    } catch (err: any) {
+      HandleError(err);
     }
   },
 
@@ -55,8 +58,8 @@ export const api = {
     try {
       const response = await axios.get("/classroom");
       return response.data;
-    } catch (err) {
-      alert(err);
+    } catch (err: any) {
+      HandleError(err);
     }
   },
 
@@ -65,7 +68,7 @@ export const api = {
       const response = await axios.post("/classroom", payload);
       return response.data;
     } catch (err) {
-      alert(err);
+      HandleError(err);
     }
   },
 
@@ -74,7 +77,7 @@ export const api = {
       const response = await axios.patch("/classroom", payload);
       return response.data;
     } catch (err) {
-      alert(err);
+      HandleError(err);
     }
   },
 
@@ -83,7 +86,7 @@ export const api = {
       const response = await axios.delete(`/classroom/${payload}`);
       return response.data;
     } catch (err) {
-      alert(err);
+      HandleError(err);
     }
   },
 
@@ -96,7 +99,7 @@ export const api = {
       });
       return response.data;
     } catch (err) {
-      alert(err);
+      HandleError(err);
     }
   },
 
@@ -105,7 +108,17 @@ export const api = {
       const response = await axios.get("/attendance-list");
       return response.data;
     } catch (err) {
-      alert(err);
+      HandleError(err);
+    }
+  },
+
+  // user keys
+  createUser: async (payload: UserPayload) => {
+    try {
+      const response = await axios.post("/user", payload);
+      return response.data;
+    } catch (err) {
+      HandleError(err);
     }
   },
 };

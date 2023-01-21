@@ -17,3 +17,10 @@ export type UpdateClassroomPayload = {
   teachersIds?: string[];
   studentsIds?: string[];
 };
+
+export type UserPayload = {
+  name: string;
+  email: string;
+  password: string;
+  cpf: string;
+};

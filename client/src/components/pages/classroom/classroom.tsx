@@ -1,14 +1,12 @@
-import { FormEvent, useEffect, useState } from "react";
-import { Select } from "../../atoms/select/select";
-import { ClickedButton } from "./styles";
-import { Card } from "../../atoms/card/card";
+import { useEffect, useState } from "react";
 import { api } from "../../../utils/api/api";
-import { Form, InputProps } from "../../atoms/form/form";
-import { CreateClassroomForm } from "../../celules/create-classroom-form/create-classroom-form";
-import AttendancesList from "../../celules/attendances-lists/attendances-lists";
 import { Classroom } from "../../../utils/types/data";
-import { UpdateClassroomForm } from "../../celules/update-classroom-form/update-classroom-form";
+import { Select } from "../../atoms/select/select";
+import AttendancesList from "../../celules/attendances-lists/attendances-lists";
 import { ClassroomCard } from "../../molecules/classroom-card/classroom-card";
+import { CreateClassroomForm } from "../../celules/create-classroom-form/create-classroom-form";
+import { UpdateClassroomForm } from "../../celules/update-classroom-form/update-classroom-form";
+import { ClassroomCardOptionsContainer } from "../../molecules/classroom-card/styles";
 
 export function Classroom() {
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
@@ -16,7 +14,6 @@ export function Classroom() {
     string | undefined
   >();
   const [control, setControl] = useState<boolean>(false);
-
   const [isEditingMode, setIsEditingMode] = useState<boolean>(false);
 
   const classroomSelectedData = classrooms.find(
@@ -38,6 +35,11 @@ export function Classroom() {
 
   function handleEditMode() {
     setIsEditingMode(!isEditingMode);
+  }
+
+  async function handleDeleteClassroom() {
+    await api.deleteClassroom(classroomSelectedData?.id ?? "");
+    handleControl();
   }
 
   // 1 array de dependencias vazio = executa uma vez quando o component é montado
@@ -74,12 +76,34 @@ export function Classroom() {
         {selectedClassroom && (
           <ClassroomCard
             classroom={classroomSelectedData ?? ({} as Classroom)}
-            changeEditingMode={handleEditMode}
-            handleControl={handleControl}
-            editingMode={isEditingMode}
           />
         )}
       </div>
+      <ClassroomCardOptionsContainer>
+        {selectedClassroom && (
+          <>
+            <button
+              onClick={() => {
+                handleEditMode();
+              }}
+            >
+              Edit this classroom
+            </button>
+            <button onClick={handleDeleteClassroom}>
+              Delete this classroom
+            </button>
+          </>
+        )}
+        {isEditingMode ? (
+          <UpdateClassroomForm
+            handleControl={handleControl}
+            classroom={classroomSelectedData ?? ({} as Classroom)}
+            changeEditingMode={handleEditMode}
+          />
+        ) : (
+          <CreateClassroomForm handleControl={handleControl} />
+        )}
+      </ClassroomCardOptionsContainer>
       <AttendancesList selectedClassroom={selectedClassroom} />
     </div>
   );
