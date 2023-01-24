@@ -3,10 +3,14 @@ import { api } from "../../../utils/api/api";
 import { Classroom } from "../../../utils/types/data";
 import { Select } from "../../atoms/select/select";
 import AttendancesList from "../../celules/attendances-lists/attendances-lists";
-import { ClassroomCard } from "../../molecules/classroom-card/classroom-card";
+import { ClassroomPage } from "../classroom-page/classroom-page";
 import { CreateClassroomForm } from "../../celules/create-classroom-form/create-classroom-form";
 import { UpdateClassroomForm } from "../../celules/update-classroom-form/update-classroom-form";
-import { ClassroomCardOptionsContainer } from "../../molecules/classroom-card/styles";
+import { ClassroomCardOptionsContainer } from "../classroom-page/styles";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { ClassroomCard } from "../../atoms/classroom-card/classroom-card";
+import { colors } from "../../../utils/colors";
+import { ClassroomContentDiv, ClassroomDiv } from "./styles";
 
 export function Classroom() {
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
@@ -19,6 +23,8 @@ export function Classroom() {
   const classroomSelectedData = classrooms.find(
     (classroom) => classroom.id === selectedClassroom
   );
+
+  const navigate = useNavigate();
 
   console.log(JSON.parse(localStorage.getItem("user") ?? "").role);
 
@@ -66,47 +72,22 @@ export function Classroom() {
   // });{
 
   return (
-    <div>
-      <h2>Clasrooms</h2>
-      <Select
-        options={classrooms.map((classroom) => {
-          return { name: classroom.name, value: classroom.id };
+    <ClassroomDiv>
+      <ClassroomContentDiv>
+        {classrooms.map((classroom) => {
+          const color =
+            colors[Math.floor(Math.random() * colors.length - 1) + 1];
+          return (
+            <ClassroomCard
+              key={classroom.id}
+              id={classroom.id}
+              name={classroom.name}
+              theme={classroom.theme}
+              color={color}
+            />
+          );
         })}
-        selectedOption={getSelectedClassroom}
-      />
-      <div>
-        {selectedClassroom && (
-          <ClassroomCard
-            classroom={classroomSelectedData ?? ({} as Classroom)}
-          />
-        )}
-      </div>
-      <ClassroomCardOptionsContainer>
-        {selectedClassroom && (
-          <>
-            <button
-              onClick={() => {
-                handleEditMode();
-              }}
-            >
-              Edit this classroom
-            </button>
-            <button onClick={handleDeleteClassroom}>
-              Delete this classroom
-            </button>
-          </>
-        )}
-        {isEditingMode ? (
-          <UpdateClassroomForm
-            handleControl={handleControl}
-            classroom={classroomSelectedData ?? ({} as Classroom)}
-            changeEditingMode={handleEditMode}
-          />
-        ) : (
-          <CreateClassroomForm handleControl={handleControl} />
-        )}
-      </ClassroomCardOptionsContainer>
-      <AttendancesList selectedClassroom={selectedClassroom} />
-    </div>
+      </ClassroomContentDiv>
+    </ClassroomDiv>
   );
 }

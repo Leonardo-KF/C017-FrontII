@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../utils/api/api";
-import { AttendancePayload } from "../../pages/classroom/classroom";
+import { AttendancePayload } from "../../../utils/types/data";
 
 export type AttendacesListsProps = {
   selectedClassroom: string | undefined;

@@ -65,6 +65,18 @@ export const api = {
     }
   },
 
+  getClassroomById: async (id: string) => {
+    try {
+      const response = await axios.get(`/classroom/${id}`);
+      if (!response.data) {
+        throw new Error("Classroom not found");
+      }
+      return response.data;
+    } catch (err: any) {
+      HandleError(err);
+    }
+  },
+
   createClassroom: async (payload: CreateClassroomPayload) => {
     try {
       const response = await axios.post("/classroom", payload);

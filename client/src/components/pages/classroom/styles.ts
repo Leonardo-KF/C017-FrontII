@@ -1,14 +1,18 @@
 import styled from "styled-components";
 
-type clickedButtonProps = {
-  isSelect: boolean;
-};
-
-export const ClickedButton = styled.button<clickedButtonProps>`
+export const ClassroomDiv = styled.div`
   display: flex;
+  width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
-  width: 40%;
-  border: 3px solid ${(props) => (props.isSelect ? "green" : "red")};
-  border-radius: 10px;
+`;
+
+export const ClassroomContentDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 80%;
+  height: 100%;
 `;
