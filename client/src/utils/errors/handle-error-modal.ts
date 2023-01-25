@@ -1,9 +1,13 @@
 import Swal from "sweetalert2";
 
-export function HandleError(err: any) {
+type HandleErrorProps = {
+  message: string;
+};
+
+export function HandleError({ message }: HandleErrorProps) {
   Swal.fire({
     icon: "error",
     title: "Oops...",
-    text: err.message,
+    text: message,
   });
 }

@@ -50,7 +50,7 @@ export const api = {
 
       return response.data;
     } catch (err: any) {
-      HandleError(err);
+      HandleError({ message: err.message });
     }
   },
 
@@ -61,7 +61,7 @@ export const api = {
       const response = await axios.get("/classroom");
       return response.data;
     } catch (err: any) {
-      HandleError(err);
+      HandleError({ message: err.message });
     }
   },
 
@@ -73,7 +73,7 @@ export const api = {
       }
       return response.data;
     } catch (err: any) {
-      HandleError(err);
+      HandleError({ message: err.message });
     }
   },
 
@@ -81,8 +81,8 @@ export const api = {
     try {
       const response = await axios.post("/classroom", payload);
       return response.data;
-    } catch (err) {
-      HandleError(err);
+    } catch (err: any) {
+      HandleError({ message: err.message });
     }
   },
 
@@ -90,8 +90,8 @@ export const api = {
     try {
       const response = await axios.patch("/classroom", payload);
       return response.data;
-    } catch (err) {
-      HandleError(err);
+    } catch (err: any) {
+      HandleError({ message: err.message });
     }
   },
 
@@ -99,8 +99,8 @@ export const api = {
     try {
       const response = await axios.delete(`/classroom/${payload}`);
       return response.data;
-    } catch (err) {
-      HandleError(err);
+    } catch (err: any) {
+      HandleError({ message: err.message });
     }
   },
 
@@ -112,8 +112,8 @@ export const api = {
         classroomId,
       });
       return response.data;
-    } catch (err) {
-      HandleError(err);
+    } catch (err: any) {
+      HandleError({ message: err.message });
     }
   },
 
@@ -121,8 +121,8 @@ export const api = {
     try {
       const response = await axios.get("/attendance-list");
       return response.data;
-    } catch (err) {
-      HandleError(err);
+    } catch (err: any) {
+      HandleError({ message: err.message });
     }
   },
 
@@ -131,8 +131,8 @@ export const api = {
     try {
       const response = await axios.post("/user", payload);
       return response.data;
-    } catch (err) {
-      HandleError(err);
+    } catch (err: any) {
+      HandleError({ message: err.message });
     }
   },
 };
