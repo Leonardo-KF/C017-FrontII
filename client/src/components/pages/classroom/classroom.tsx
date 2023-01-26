@@ -1,30 +1,15 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../utils/api/api";
-import { Classroom } from "../../../utils/types/data";
-import { Select } from "../../atoms/select/select";
-import AttendancesList from "../../celules/attendances-lists/attendances-lists";
-import { ClassroomPage } from "../classroom-page/classroom-page";
-import { CreateClassroomForm } from "../../celules/create-classroom-form/create-classroom-form";
-import { UpdateClassroomForm } from "../../celules/update-classroom-form/update-classroom-form";
-import { ClassroomCardOptionsContainer } from "../classroom-page/styles";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { ClassroomCard } from "../../atoms/classroom-card/classroom-card";
 import { colors } from "../../../utils/colors";
+import { Classroom } from "../../../utils/types/data";
+import { ClassroomCard } from "../../atoms/classroom-card/classroom-card";
+import { Select } from "../../atoms/select/select";
 import { ClassroomContentDiv, ClassroomDiv } from "./styles";
 
 export function Classroom() {
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
-  const [selectedClassroom, setSelectedClassroom] = useState<
-    string | undefined
-  >();
-  const [control, setControl] = useState<boolean>(false);
-  const [isEditingMode, setIsEditingMode] = useState<boolean>(false);
-
-  const classroomSelectedData = classrooms.find(
-    (classroom) => classroom.id === selectedClassroom
-  );
-
-  const navigate = useNavigate();
+  const [search, setSearch] = useState<string>("");
+  const [paramToFilter, setParamToFilter] = useState<string>("name");
 
   console.log(JSON.parse(localStorage.getItem("user") ?? "").role);
 
@@ -33,27 +18,19 @@ export function Classroom() {
     setClassrooms(data);
   }
 
-  function getSelectedClassroom(value: string) {
-    setSelectedClassroom(value);
-  }
-
-  function handleControl() {
-    setControl(!control);
-  }
-
-  function handleEditMode() {
-    setIsEditingMode(!isEditingMode);
-  }
-
-  async function handleDeleteClassroom() {
-    await api.deleteClassroom(classroomSelectedData?.id ?? "");
-    handleControl();
-  }
+  const filteredClassrooms = classrooms.filter((classroom) => {
+    if (paramToFilter === "name")
+      return classroom.name.toUpperCase().includes(search.toUpperCase());
+    if (paramToFilter === "theme")
+      return classroom.theme.toUpperCase().includes(search.toUpperCase());
+    if (paramToFilter === "subject")
+      return classroom.subject.toUpperCase().includes(search.toUpperCase());
+  });
 
   // 1 array de dependencias vazio = executa uma vez quando o component é montado
   useEffect(() => {
     findClassrooms();
-  }, [control]);
+  }, []);
 
   // 2 array de dependencias com valor = executa toda vez que o valor mudar
   // useEffect(() => {
@@ -71,10 +48,26 @@ export function Classroom() {
   //   findClassrooms();
   // });{
 
+  console.log(search);
+
   return (
     <ClassroomDiv>
+      <input
+        type="text"
+        onChange={(e) => {
+          setSearch(e.currentTarget.value);
+        }}
+      />
+      <Select
+        selectedOption={setParamToFilter}
+        options={[
+          { name: "Name", value: "name" },
+          { name: "Theme", value: "theme" },
+          { name: "Subject", value: "subject" },
+        ]}
+      />
       <ClassroomContentDiv>
-        {classrooms.map((classroom) => {
+        {filteredClassrooms.map((classroom) => {
           const color =
             colors[Math.floor(Math.random() * colors.length - 1) + 1];
           return (
