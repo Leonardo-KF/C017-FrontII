@@ -3,8 +3,14 @@ import { FiLogOut } from "react-icons/fi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../../utils/types/data";
+import { ModalCelule } from "../../celules/modal/modal";
+import { useState } from "react";
+import { CreateClassroomForm } from "../../celules/create-classroom-form/create-classroom-form";
 export function Header() {
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+
+  console.log(isOpen);
 
   let user = {} as User;
   if (localStorage.getItem("token") !== null)
@@ -16,6 +22,10 @@ export function Header() {
     navigate("/");
   }
 
+  function handleModal() {
+    setIsOpen(!isOpen);
+  }
+
   return (
     <HeaderDiv>
       <HeaderDivTitle>
@@ -25,7 +35,7 @@ export function Header() {
       {user.id && (
         <HeaderDivButtons>
           {user.role === "teacher" && (
-            <button>
+            <button onClick={handleModal}>
               <IoMdAddCircleOutline size={20} /> Create Classroom
             </button>
           )}
@@ -34,6 +44,16 @@ export function Header() {
           </button>
         </HeaderDivButtons>
       )}
+      <ModalCelule
+        handleModal={handleModal}
+        isOpen={isOpen}
+        children={
+          <CreateClassroomForm
+            changeEditingMode={handleModal}
+            handleControl={() => {}}
+          />
+        }
+      />
     </HeaderDiv>
   );
 }

@@ -18,6 +18,7 @@ export const ClassroomCardButton = styled.button<ClassroomButtonProps>`
   min-width: 130px;
   cursor: pointer;
   transition: 0.5s;
+  margin: 0 10px;
 
   :hover {
     transform: scale(1.15);
