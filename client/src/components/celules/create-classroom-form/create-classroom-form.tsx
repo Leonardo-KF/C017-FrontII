@@ -4,10 +4,12 @@ import { Form } from "../../atoms/form/form";
 
 export interface CreateClassroomFormProps {
   handleControl: () => void;
+  changeEditingMode: () => void;
 }
 
 export function CreateClassroomForm({
   handleControl,
+  changeEditingMode,
 }: CreateClassroomFormProps) {
   const inputsData = [
     {
@@ -48,6 +50,7 @@ export function CreateClassroomForm({
         title={"Create a classroom"}
         inputs={inputsData}
         onSubmit={HandleSubmit}
+        cancel={changeEditingMode}
       />
     </section>
   );

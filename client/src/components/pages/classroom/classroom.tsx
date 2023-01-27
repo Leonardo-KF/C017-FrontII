@@ -4,7 +4,12 @@ import { colors } from "../../../utils/colors";
 import { Classroom } from "../../../utils/types/data";
 import { ClassroomCard } from "../../atoms/classroom-card/classroom-card";
 import { Select } from "../../atoms/select/select";
-import { ClassroomContentDiv, ClassroomDiv } from "./styles";
+import {
+  ClassroomContentDiv,
+  ClassroomDiv,
+  ClassroomFilterDiv,
+  ClassroomInput,
+} from "./styles";
 
 export function Classroom() {
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
@@ -52,20 +57,26 @@ export function Classroom() {
 
   return (
     <ClassroomDiv>
-      <input
-        type="text"
-        onChange={(e) => {
-          setSearch(e.currentTarget.value);
-        }}
-      />
-      <Select
-        selectedOption={setParamToFilter}
-        options={[
-          { name: "Name", value: "name" },
-          { name: "Theme", value: "theme" },
-          { name: "Subject", value: "subject" },
-        ]}
-      />
+      <ClassroomFilterDiv>
+        <h2>Filters</h2>
+        <div>
+          <ClassroomInput
+            type="text"
+            onChange={(e) => {
+              setSearch(e.currentTarget.value);
+            }}
+            placeholder="Search"
+          />
+          <Select
+            selectedOption={setParamToFilter}
+            options={[
+              { name: "Name", value: "name" },
+              { name: "Theme", value: "theme" },
+              { name: "Subject", value: "subject" },
+            ]}
+          />
+        </div>
+      </ClassroomFilterDiv>
       <ClassroomContentDiv>
         {filteredClassrooms.map((classroom) => {
           const color =
