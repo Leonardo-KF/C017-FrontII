@@ -9,6 +9,11 @@ export type User = {
   role: string;
 };
 
+export type LoginResponse = {
+  token: string;
+  user: User;
+};
+
 export type Classroom = {
   id: string;
   name: string;

@@ -6,6 +6,7 @@ import {
   UserPayload,
 } from "../types/requests";
 import { HandleError } from "../errors/handle-error-modal";
+import { LoginResponse, User } from "../types/data";
 
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -41,14 +42,14 @@ export const api = {
   // auth keys
   login: async ({ email, password }: LoginRequest) => {
     try {
-      const response = await axios.post("/Authorization/login", {
+      const response = await axios.post<LoginResponse>("/Authorization/login", {
         email,
         password,
       });
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      return response.data;
+      return response.data.user;
     } catch (err: any) {
       HandleError({ message: err.message });
     }

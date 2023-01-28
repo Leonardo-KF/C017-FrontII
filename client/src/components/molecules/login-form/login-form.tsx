@@ -31,6 +31,11 @@ export function LoginForm() {
       setError(true);
       return;
     }
+
+    if (userData.role === "student" && userData.classroomStudentId) {
+      navigate("/classroom/" + userData.classroomStudentId);
+      return;
+    }
     navigate("/classroom");
   }
 
