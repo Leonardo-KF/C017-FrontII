@@ -105,6 +105,32 @@ export const api = {
     }
   },
 
+  enterInClassroomWithStudent: async (classroomId: string) => {
+    try {
+      const response = await axios.patch("/classroom/enter-student", {
+        id: classroomId,
+      });
+      return response.data;
+    } catch (err: any) {
+      HandleError({ message: err.message });
+    }
+  },
+
+  enterInClassroomWithTeacher: async (
+    classroomId: string,
+    teacherId: string
+  ) => {
+    try {
+      const response = await axios.patch("/classroom/add-teacher", {
+        id: classroomId,
+        teacherId,
+      });
+      return response.data;
+    } catch (err: any) {
+      HandleError({ message: err.message });
+    }
+  },
+
   // attendance keys
 
   createAttendanceListToClassroom: async (classroomId: string) => {
@@ -112,6 +138,15 @@ export const api = {
       const response = await axios.post("/attendance-list", {
         classroomId,
       });
+      return response.data;
+    } catch (err: any) {
+      HandleError({ message: err.message });
+    }
+  },
+
+  myAttendances: async () => {
+    try {
+      const response = await axios.get("/attendance-list/me");
       return response.data;
     } catch (err: any) {
       HandleError({ message: err.message });

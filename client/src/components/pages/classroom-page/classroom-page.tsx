@@ -11,6 +11,7 @@ import {
 import { useParams } from "react-router-dom";
 import { HandleError } from "../../../utils/errors/handle-error-modal";
 import AttendancesList from "../../celules/attendances-lists/attendances-lists";
+import { PersonalizedInput } from "../../atoms/form/styles";
 
 export type ClassroomCardProps = {
   classroom?: Classroom;
@@ -20,10 +21,20 @@ export function ClassroomPage({ classroom }: ClassroomCardProps) {
     classroom ?? ({} as Classroom)
   );
 
+  const [myAttendances, setMyAttendances] = useState<any>([]);
+
   async function getClassroomData(id: string) {
     const data = await api.getClassroomById(id);
     setClassroomData(data);
   }
+
+  async function getMyAttendances() {
+    const data = await api.myAttendances();
+    setMyAttendances(data);
+    console.log(data);
+  }
+
+  const user = JSON.parse(localStorage.getItem("user") ?? "");
 
   const { id } = useParams();
 
@@ -37,6 +48,12 @@ export function ClassroomPage({ classroom }: ClassroomCardProps) {
       }
     }
   }, []);
+
+  useEffect(() => {
+    getMyAttendances();
+  }, []);
+
+  // HOC = High Order Component
 
   return (
     <ClassroomCardContainer>
@@ -65,32 +82,22 @@ export function ClassroomPage({ classroom }: ClassroomCardProps) {
           })}
         </section>
       </CardInfoContainer>
-      <AttendancesList selectedClassroom={classroomData.id} />
-      {/* <ClassroomCardOptionsContainer>
-        {selectedClassroom && (
-          <>
-            <button
-              onClick={() => {
-                handleEditMode();
-              }}
-            >
-              Edit this classroom
-            </button>
-            <button onClick={handleDeleteClassroom}>
-              Delete this classroom
-            </button>
-          </>
-        )}
-        {isEditingMode ? (
-          <UpdateClassroomForm
-            handleControl={handleControl}
-            classroom={classroomSelectedData ?? ({} as Classroom)}
-            changeEditingMode={handleEditMode}
-          />
-        ) : (
-          <CreateClassroomForm handleControl={handleControl} />
-        )}
-      </ClassroomCardOptionsContainer> */}
+      {user.role === "teacher" ? (
+        <AttendancesList selectedClassroom={classroomData.id} />
+      ) : (
+        <>
+          <h2>Register on attendance</h2>
+          <PersonalizedInput type="text" placeholder="Enter attendance id" />
+          <h2>My Attendances:</h2>
+          {myAttendances.map((attendance) => {
+            return (
+              <div>
+                <h2>{attendance.day}</h2>
+              </div>
+            );
+          })}
+        </>
+      )}
     </ClassroomCardContainer>
   );
 }
