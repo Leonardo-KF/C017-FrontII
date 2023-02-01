@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../utils/api/api";
 import { AttendancePayload } from "../../../utils/types/data";
+import { sortedAttendance } from "../../../utils/functions/sortedAttendanceByDays";
+import {
+  AttendanceListBox,
+  AttendanceListCard,
+  AttendanceListSection,
+} from "./styles";
 
 export type AttendacesListsProps = {
   selectedClassroom: string | undefined;
@@ -17,6 +23,10 @@ export default function AttendancesList({
         (attendance) => attendance.classroomId === selectedClassroom
       )
     : [];
+
+  const sortedClassroomAttendances = sortedAttendance(
+    sortedAttendancesByClassroomId
+  );
 
   async function findAttendances() {
     const data = await api.getAttendanceLists();
@@ -38,20 +48,37 @@ export default function AttendancesList({
   }, [control]);
 
   return (
-    <section>
-      <h2>Attendances Lists</h2>
-      <button disabled={!selectedClassroom} onClick={createAttendanceList}>
-        Create Attendance List to this Classroom
-      </button>
-      {sortedAttendancesByClassroomId.map((attendance) => {
-        return (
-          <div key={attendance.id}>
-            <span>{attendance.day}</span>
-            <span>{attendance.startDate}</span>
-            <span>{attendance.endDate}</span>
-          </div>
-        );
-      })}
-    </section>
+    <AttendanceListSection>
+      <div>
+        <button disabled={!selectedClassroom} onClick={createAttendanceList}>
+          Create Attendance List to this Classroom
+        </button>
+        <h2>Attendances Lists</h2>
+      </div>
+      <AttendanceListBox>
+        {sortedClassroomAttendances.map((attendance, index) => {
+          return (
+            <AttendanceListCard key={index}>
+              <h2>{attendance.date}</h2>
+              {attendance.attendances.map((attendance, index) => {
+                return (
+                  <div>
+                    <h3>Hour: {attendance.hour}</h3>
+                    <div>
+                      <h3>Students:</h3>
+                      <ul>
+                        {attendance.students?.map((student, index) => {
+                          return <li key={index}>{student.name}</li>;
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+                );
+              })}
+            </AttendanceListCard>
+          );
+        })}
+      </AttendanceListBox>
+    </AttendanceListSection>
   );
 }

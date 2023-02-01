@@ -30,5 +30,5 @@ export type AttendancePayload = {
   startDate: string;
   endDate: string;
   day: string;
-  students: User[];
+  students?: User[];
 };

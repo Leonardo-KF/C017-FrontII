@@ -162,6 +162,20 @@ export const api = {
     }
   },
 
+  registerOnAttendance: async (attendanceId: string) => {
+    try {
+      const response = await axios.post(
+        "/attendance-list/registerInAttendanceList",
+        {
+          attendanceListId: attendanceId,
+        }
+      );
+      return response.data;
+    } catch (err: any) {
+      HandleError({ message: err.message });
+    }
+  },
+
   // user keys
   createUser: async (payload: UserPayload) => {
     try {

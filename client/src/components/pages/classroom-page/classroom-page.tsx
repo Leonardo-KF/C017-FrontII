@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../utils/api/api";
-import { Classroom } from "../../../utils/types/data";
-import { CreateClassroomForm } from "../../celules/create-classroom-form/create-classroom-form";
-import { UpdateClassroomForm } from "../../celules/update-classroom-form/update-classroom-form";
-import {
-  CardInfoContainer,
-  ClassroomCardContainer,
-  ClassroomCardOptionsContainer,
-} from "./styles";
 import { useParams } from "react-router-dom";
+import { api } from "../../../utils/api/api";
 import { HandleError } from "../../../utils/errors/handle-error-modal";
-import AttendancesList from "../../celules/attendances-lists/attendances-lists";
+import { sortedAttendance } from "../../../utils/functions/sortedAttendanceByDays";
+import { AttendancePayload, Classroom } from "../../../utils/types/data";
 import { PersonalizedInput } from "../../atoms/form/styles";
+import AttendancesList from "../../celules/attendances-lists/attendances-lists";
+import { CardInfoContainer, ClassroomCardContainer } from "./styles";
 
 export type ClassroomCardProps = {
   classroom?: Classroom;
 };
+
 export function ClassroomPage({ classroom }: ClassroomCardProps) {
   const [classroomData, setClassroomData] = useState<Classroom>(
     classroom ?? ({} as Classroom)
   );
-
-  const [myAttendances, setMyAttendances] = useState<any>([]);
+  const [myAttendances, setMyAttendances] = useState<AttendancePayload[]>([]);
+  const [control, setControl] = useState(false);
 
   async function getClassroomData(id: string) {
     const data = await api.getClassroomById(id);
@@ -33,6 +29,14 @@ export function ClassroomPage({ classroom }: ClassroomCardProps) {
     setMyAttendances(data);
     console.log(data);
   }
+
+  async function registerInAttendanceList(id: string) {
+    const data = await api.registerOnAttendance(id);
+    setControl(!control);
+    console.log(data);
+  }
+
+  const attendancesByDay = sortedAttendance(myAttendances);
 
   const user = JSON.parse(localStorage.getItem("user") ?? "");
 
@@ -51,7 +55,7 @@ export function ClassroomPage({ classroom }: ClassroomCardProps) {
 
   useEffect(() => {
     getMyAttendances();
-  }, []);
+  }, [control]);
 
   // HOC = High Order Component
 
@@ -85,18 +89,35 @@ export function ClassroomPage({ classroom }: ClassroomCardProps) {
       {user.role === "teacher" ? (
         <AttendancesList selectedClassroom={classroomData.id} />
       ) : (
-        <>
+        <div>
           <h2>Register on attendance</h2>
-          <PersonalizedInput type="text" placeholder="Enter attendance id" />
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              registerInAttendanceList(event.currentTarget.attendanceId.value);
+              console.log(new Date(event.currentTarget.data.value));
+            }}
+          >
+            <PersonalizedInput
+              type="text"
+              placeholder="Enter attendance id"
+              name="attendanceId"
+            />
+            <input type="date" name="data" />
+            <button>Submit</button>
+          </form>
           <h2>My Attendances:</h2>
-          {myAttendances.map((attendance) => {
+          {attendancesByDay.map((attendancesByDay) => {
             return (
               <div>
-                <h2>{attendance.day}</h2>
+                <h2>Attendances of day: {attendancesByDay.date}</h2>
+                {attendancesByDay.attendances.map((attendance) => {
+                  return <h3>Hour: {attendance.hour}</h3>;
+                })}
               </div>
             );
           })}
-        </>
+        </div>
       )}
     </ClassroomCardContainer>
   );
