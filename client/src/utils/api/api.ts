@@ -8,7 +8,7 @@ import {
 import { HandleError } from "../errors/handle-error-modal";
 import { LoginResponse, User } from "../types/data";
 
-axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.baseURL = "https://c0017-back2-production.up.railway.app";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 axios.interceptors.request.use(
