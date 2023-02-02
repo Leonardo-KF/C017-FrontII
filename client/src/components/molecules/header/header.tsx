@@ -6,6 +6,7 @@ import { User } from "../../../utils/types/data";
 import { ModalCelule } from "../../celules/modal/modal";
 import { useState } from "react";
 import { CreateClassroomForm } from "../../celules/create-classroom-form/create-classroom-form";
+import listIcon from "../../../assets/list.png";
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export function Header() {
   return (
     <HeaderDiv>
       <HeaderDivTitle>
-        <img src="list.png" alt="icon" />
+        <img src="/list.png" alt="icon" />
         <h2>Attendance Control</h2>
       </HeaderDivTitle>
       {user.id && (
