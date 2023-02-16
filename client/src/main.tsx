@@ -8,18 +8,21 @@ import { Classroom } from "./components/pages/classroom/classroom";
 import { CreateUser } from "./components/pages/create-user/create-user";
 import { ClassroomPage } from "./components/pages/classroom-page/classroom-page";
 import { Header } from "./components/molecules/header/header";
+import { AuthProvider } from "./context/auth-context";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/classroom" element={<Classroom />} />
-          <Route path="/register" element={<CreateUser />} />
-          <Route path="/classroom/:id" element={<ClassroomPage />} />
-        </Routes>
+        <AuthProvider>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/classroom" element={<Classroom />} />
+            <Route path="/register" element={<CreateUser />} />
+            <Route path="/classroom/:id" element={<ClassroomPage />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
       <GlobalStyle />
     </ThemeProvider>

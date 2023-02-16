@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ClassroomCardButton } from "./styles";
 import Swal from "sweetalert2";
 import { api } from "../../../utils/api/api";
+import { useAuth } from "../../../hooks/useAuth";
 
 export type CardProps = {
   id: string;
@@ -11,7 +12,7 @@ export type CardProps = {
 };
 
 export function ClassroomCard({ id, name, theme, color }: CardProps) {
-  const user = JSON.parse(localStorage.getItem("user") ?? "");
+  const { user } = useAuth();
 
   const navigate = useNavigate();
   function modal() {

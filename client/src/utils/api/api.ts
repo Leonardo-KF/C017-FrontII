@@ -8,7 +8,8 @@ import {
 import { HandleError } from "../errors/handle-error-modal";
 import { LoginResponse, User } from "../types/data";
 
-axios.defaults.baseURL = "https://c0017-back2-production.up.railway.app";
+// axios.defaults.baseURL = "https://c0017-back2-production.up.railway.app";
+axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 axios.interceptors.request.use(
@@ -47,9 +48,17 @@ export const api = {
         password,
       });
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
 
       return response.data.user;
+    } catch (err: any) {
+      HandleError({ message: err.message });
+    }
+  },
+
+  authorization: async () => {
+    try {
+      const response = await axios.get<User>("/Authorization");
+      return response.data;
     } catch (err: any) {
       HandleError({ message: err.message });
     }

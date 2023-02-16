@@ -2,24 +2,22 @@ import { HeaderDiv, HeaderDivButtons, HeaderDivTitle } from "./styles";
 import { FiLogOut } from "react-icons/fi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { User } from "../../../utils/types/data";
 import { ModalCelule } from "../../celules/modal/modal";
 import { useState } from "react";
 import { CreateClassroomForm } from "../../celules/create-classroom-form/create-classroom-form";
-import listIcon from "../../../assets/list.png";
+import { useAuth } from "../../../hooks/useAuth";
+import { User } from "../../../utils/types/data";
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
 
   console.log(isOpen);
 
-  let user = {} as User;
-  if (localStorage.getItem("token") !== null)
-    user = JSON.parse(localStorage.getItem("user") ?? "");
-
   function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    setUser({} as User);
     navigate("/");
   }
 

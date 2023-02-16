@@ -16,8 +16,6 @@ export function Classroom() {
   const [search, setSearch] = useState<string>("");
   const [paramToFilter, setParamToFilter] = useState<string>("name");
 
-  console.log(JSON.parse(localStorage.getItem("user") ?? "").role);
-
   async function findClassrooms() {
     const data = await api.getClassrooms();
     setClassrooms(data);

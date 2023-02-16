@@ -7,6 +7,7 @@ import { AttendancePayload, Classroom } from "../../../utils/types/data";
 import { PersonalizedInput } from "../../atoms/form/styles";
 import AttendancesList from "../../celules/attendances-lists/attendances-lists";
 import { CardInfoContainer, ClassroomCardContainer } from "./styles";
+import { useAuth } from "../../../hooks/useAuth";
 
 export type ClassroomCardProps = {
   classroom?: Classroom;
@@ -18,6 +19,7 @@ export function ClassroomPage({ classroom }: ClassroomCardProps) {
   );
   const [myAttendances, setMyAttendances] = useState<AttendancePayload[]>([]);
   const [control, setControl] = useState(false);
+  const { user } = useAuth();
 
   async function getClassroomData(id: string) {
     const data = await api.getClassroomById(id);
@@ -37,8 +39,6 @@ export function ClassroomPage({ classroom }: ClassroomCardProps) {
   }
 
   const attendancesByDay = sortedAttendance(myAttendances);
-
-  const user = JSON.parse(localStorage.getItem("user") ?? "");
 
   const { id } = useParams();
 
